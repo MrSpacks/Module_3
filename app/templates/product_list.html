@@ -1,0 +1,33 @@
+<h1>Товары</h1>
+
+{% if user.is_authenticated %}
+    <p>Привет, {{ user.username }} | Баланс: {{ user.balance }} | <a href="{% url 'logout' %}">Выйти</a></p>
+{% else %}
+    <p><a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a></p>
+{% endif %}
+
+<ul>
+  {% for product in products %}
+    <li>
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <p>Цена: {{ product.price }} | Остаток: {{ product.stock }}</p>
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'buy_product' product.id %}">
+          {% csrf_token %}
+          <input type="number" name="quantity" min="1" max="{{ product.stock }}" required>
+          <button type="submit">Купить</button>
+        </form>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li style="color: red">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}

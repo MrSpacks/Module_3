@@ -33,7 +33,7 @@ class Order(models.Model):
     
 # Возврат - содержит информацию, о затребованном возврате ( связь с покупкой, время запроса)
 class ReturnRequest(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
     requested_at = models.DateTimeField(auto_now_add=True)
     reason = models.TextField()
 
