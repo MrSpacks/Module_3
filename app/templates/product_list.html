@@ -1,9 +1,15 @@
 <h1>Товары</h1>
 
 {% if user.is_authenticated %}
-    <p>Привет, {{ user.username }} | Баланс: {{ user.balance }} | <a href="{% url 'logout' %}">Выйти</a></p>
+    <p>Привет, {{ user.username }} | Баланс: {{ user.balance }} | <a href="{% url 'my_orders' %}">Мои заказы</a>| <a href="{% url 'logout' %}">Выйти</a></p>
 {% else %}
     <p><a href="{% url 'login' %}">Войти</a> | <a href="{% url 'register' %}">Регистрация</a></p>
+{% endif %}
+{% if user.is_superuser %}
+  <p>
+    <a href="{% url 'return_requests' %}">📦 Обработка возвратов</a> |
+    <a href="{% url 'add_product' %}" style="font-weight: bold; color: green;">+ Добавить продукт</a>
+  </p>
 {% endif %}
 
 <ul>
@@ -19,6 +25,13 @@
           <input type="number" name="quantity" min="1" max="{{ product.stock }}" required>
           <button type="submit">Купить</button>
         </form>
+      {% endif %}
+
+      {% if user.is_superuser %}
+        <p>
+          <a href="{% url 'edit_product' product.id %}" style="color: blue;">✏️ Редактировать</a> |
+          <a href="{% url 'delete_product' product.id %}" style="color: red;" onclick="return confirm('Вы уверены?')">🗑️ Удалить</a>
+        </p>
       {% endif %}
     </li>
   {% endfor %}

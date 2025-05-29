@@ -1,0 +1,21 @@
+<h1>Мои покупки</h1>
+
+{% for order, can_return in eligible_orders %}
+  <div style="border: 1px solid gray; margin: 10px; padding: 10px;">
+    <h3>{{ order.product.name }}</h3>
+    <p>Цена: {{ order.product.price }}</p>
+    <p>Дата покупки: {{ order.created_at }}</p>
+    <p>Статус: {{ order.get_status_display }}</p>
+
+   
+      <form method="post" action="{% url 'request_return' order.id %}">
+        {% csrf_token %}
+        <button type="submit">Вернуть товар</button>
+      </form>
+    
+  </div>
+{% empty %}
+  <p>У вас пока нет покупок.</p>
+{% endfor %}
+
+<a href="{% url 'product_list' %}">← Назад к товарам</a>

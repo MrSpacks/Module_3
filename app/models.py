@@ -27,6 +27,7 @@ class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=order_status, default='1')
+    quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return f"Order {self.id} by {self.user.username} for {self.product.name}"
@@ -36,6 +37,8 @@ class ReturnRequest(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
     requested_at = models.DateTimeField(auto_now_add=True)
     reason = models.TextField()
+    confirmed = models.BooleanField(default=False)  # ← добавь это поле
+
 
     def __str__(self):
         return f"Return request for Order {self.order.id} by {self.order.user.username}"

@@ -1,0 +1,22 @@
+<h1>Обработка возвратов</h1>
+<a href="{% url 'product_list' %}">Назад</a>
+{% for req in requests %}
+  <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <p><strong>Пользователь:</strong> {{ req.order.user.username }}</p>
+    <p><strong>Товар:</strong> {{ req.order.product.name }}</p>
+    <p><strong>Дата покупки:</strong> {{ req.order.created_at }}</p>
+    <p><strong>Запрошено:</strong> {{ req.requested_at }}</p>
+    <p><strong>Подтверждён:</strong> {{ req.confirmed }}</p>
+
+    {% if not req.confirmed %}
+      <form method="post" action="{% url 'confirm_return' req.id %}">
+        {% csrf_token %}
+        <button type="submit" style="color: green;">✅ Подтвердить возврат</button>
+      </form>
+    {% else %}
+      <p style="color: green;">Возврат уже подтвержден.</p>
+    {% endif %}
+  </div>
+{% empty %}
+  <p>Нет возвратов.</p>
+{% endfor %}
